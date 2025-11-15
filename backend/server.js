@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 
 app.use(express.json());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 
 app.post('/', (req, res) => {
   const { fullName, email, password } = req.body;
@@ -12,7 +16,6 @@ app.post('/', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
-  // Add your login logic here
   console.log('Login attempt with:', { email, password });
   res.send({ message: 'Login successful' });
 });

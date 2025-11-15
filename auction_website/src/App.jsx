@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import HomePage from './components/HomePage';
-import AuctionsPage from './components/AuctionsPage';
-import LoginPage from './components/LoginPage';
-import SignupPage from './components/SignupPage';
+import Footer from './components/Footer';
+import HomePage from './Pages/HomePage';
+import AuctionsPage from './Pages/AuctionsPage';
+import LoginPage from './Pages/LoginPage';
+import SignupPage from './Pages/SignupPage';
+import ContactPage from './Pages/ContactPage.jsx';
+import AboutPage from './Pages/AboutPage';
 
 const AuctionWebsite = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,9 +66,10 @@ const AuctionWebsite = () => {
           
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/about" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">Coming Soon</div>} />
-          <Route path="/contact" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">Coming Soon</div>} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage/>} />
         </Routes>
+        <Footer />
       </div>
     </Router>
   );

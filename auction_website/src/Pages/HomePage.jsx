@@ -1,6 +1,6 @@
 import React from 'react';
 import { User, Search, Gavel } from 'lucide-react';
-import AuctionCard from './AuctionCard';
+import AuctionCard from '../components/AuctionCard';
 
 export default function HomePage({ setCurrentPage, setShowSignupModal, auctionItems }) {
   return (

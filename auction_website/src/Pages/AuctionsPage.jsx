@@ -1,6 +1,6 @@
 import React from 'react';
-import FilterSection from './FilterSection';
-import AuctionCard from './AuctionCard';
+import FilterSection from '../components/FilterSection';
+import AuctionCard from '../components/AuctionCard';
 
 export default function AuctionsPage({
   searchTerm,
