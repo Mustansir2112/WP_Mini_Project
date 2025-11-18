@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -6,14 +6,17 @@ import HomePage from './Pages/HomePage';
 import AuctionsPage from './Pages/AuctionsPage';
 import LoginPage from './Pages/LoginPage';
 import SignupPage from './Pages/SignupPage';
-import ContactPage from './Pages/ContactPage.jsx';
+import ContactPage from './Pages/ContactPage';
 import AboutPage from './Pages/AboutPage';
+import ProfilePage from './Pages/ProfilePage';
 
-const AuctionWebsite = () => {
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [priceRange, setPriceRange] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [onPage, setOnPage] = useState('home');
 
   const categories = ['All', 'Electronics', 'Art', 'Collectibles', 'Jewelry', 'Vehicles', 'Real Estate'];
   
@@ -27,6 +30,14 @@ const AuctionWebsite = () => {
     { id: 7, title: 'Signed Baseball', category: 'Collectibles', currentBid: 450, endTime: '4h 25m', image: '⚾', bids: 15 },
     { id: 8, title: 'Modern Sculpture', category: 'Art', currentBid: 2100, endTime: '8h 40m', image: '🗿', bids: 22 },
   ];
+  // const [auctionItems, setAuctionItems] = useState([]);
+
+  // useEffect(() => {
+  //   fetch('http://localhost:3000/api/auctions')
+  //     .then(response => response.json())
+  //     .then(data => setAuctionItems(data))
+  //     .catch(error => console.error(error));
+  // }, []);
 
   const filteredItems = auctionItems.filter(item => {
     const matchesCategory = selectedCategory === 'all' || item.category.toLowerCase() === selectedCategory;
@@ -39,15 +50,33 @@ const AuctionWebsite = () => {
     
     return matchesCategory && matchesSearch && matchesPrice;
   });
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [onPage]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(token !== null);
+  }, []);
 
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">
-        <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-        
+        <Header 
+          isLoggedIn={isLoggedIn} 
+          setIsLoggedIn={setIsLoggedIn} 
+          onPage={onPage} 
+          setOnPage={setOnPage} 
+          isMenuOpen={isMenuOpen} 
+          setIsMenuOpen={setIsMenuOpen} 
+        />
         <Routes>
           <Route path="/" element={
-            <HomePage auctionItems={auctionItems} />
+            <HomePage 
+              auctionItems={auctionItems} 
+              setOnPage={setOnPage}
+            />
           } />
           
           <Route path="/auctions" element={
@@ -64,15 +93,28 @@ const AuctionWebsite = () => {
             />
           } />
           
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={
+            <LoginPage 
+              setOnPage={setOnPage} 
+              setIsLoggedIn={setIsLoggedIn}
+            />
+          } />
+          
+          <Route path="/signup" element={
+            <SignupPage 
+              setOnPage={setOnPage} 
+              setIsLoggedIn={setIsLoggedIn}
+            />
+          } />
+          
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage/>} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
-        <Footer />
+        <Footer setOnPage={setOnPage} />
       </div>
     </Router>
   );
 };
 
-export default AuctionWebsite;
+export default App;

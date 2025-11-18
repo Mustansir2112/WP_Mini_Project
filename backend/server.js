@@ -1,25 +1,27 @@
-const express = require('express');
+require("dotenv").config();
+const cors = require("cors");
+const express = require("express");
+const connectDB = require("./config/db");
+
 const app = express();
 
 app.use(express.json());
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true
-}));
 
-app.post('/', (req, res) => {
-  const { fullName, email, password } = req.body;
-  // Add your signup logic here
-  console.log('Signup attempt with:', { fullName, email, password });
-  res.send({ message: 'Signup successful' });
-});
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  console.log('Login attempt with:', { email, password });
-  res.send({ message: 'Login successful' });
-});
+connectDB();
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+app.use("/api/auth", require("./routes/authRoute"));
+app.use("/api/user", require("./routes/userRoute"));
+app.use("/api", require("./routes/itemRoute"));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
